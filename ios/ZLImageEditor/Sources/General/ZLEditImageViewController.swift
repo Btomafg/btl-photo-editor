@@ -34,6 +34,24 @@ extension ZLEditImageControllerDelegate {
     func onCancel() { }
 }
 
+extension UIColor {
+    convenience init?(hex: String) {
+        var hexSanitized = hex.trimmingCharacters(in: .whitespacesAndNewlines)
+        if hexSanitized.hasPrefix("#") {
+            hexSanitized.removeFirst()
+        }
+
+        var rgb: UInt64 = 0
+        Scanner(string: hexSanitized).scanHexInt64(&rgb)
+
+        let red = CGFloat((rgb >> 16) & 0xFF) / 255.0
+        let green = CGFloat((rgb >> 8) & 0xFF) / 255.0
+        let blue = CGFloat(rgb & 0xFF) / 255.0
+
+        self.init(red: red, green: green, blue: blue, alpha: 1.0)
+    }
+}
+
 public class ZLEditImageModel: NSObject {
     
     public let drawPaths: [ZLDrawPath]
@@ -450,7 +468,8 @@ public class ZLEditImageViewController: UIViewController {
         
         self.doneBtn = UIButton(type: .custom)
         self.doneBtn.titleLabel?.font = ZLImageEditorLayout.bottomToolTitleFont
-        self.doneBtn.backgroundColor = ZLImageEditorConfiguration.default().editDoneBtnBgColor
+        //self.doneBtn.backgroundColor = ZLImageEditorConfiguration.default().editDoneBtnBgColor
+        self.doneBtn.backgroundColor = UIColor(hex: "#FF1010")
         self.doneBtn.setTitleColor(ZLImageEditorConfiguration.default().editDoneTitleColor, for: .normal)
         self.doneBtn.setTitle(localLanguageTextValue(.editFinish), for: .normal)
         self.doneBtn.addTarget(self, action: #selector(doneBtnClick), for: .touchUpInside)
@@ -1133,7 +1152,7 @@ extension ZLEditImageViewController: UICollectionViewDataSource, UICollectionVie
             cell.imageView.image = image
             
             if self.currentFilter === filter {
-                cell.nameLabel.backgroundColor = ZLImageEditorConfiguration.default().editDoneBtnBgColor
+                cell.nameLabel.backgroundColor = UIColor(hex: "#FF1010")
                 
                 cell.nameLabel.font = UIFont.systemFont(ofSize: 11, weight: .semibold)
                 cell.nameLabel.textColor = ZLImageEditorConfiguration.default().editDoneTitleColor
