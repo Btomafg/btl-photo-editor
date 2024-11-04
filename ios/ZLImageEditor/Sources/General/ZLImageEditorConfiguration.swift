@@ -115,7 +115,7 @@ public class ZLImageEditorConfiguration: NSObject {
     /// Filters for image editor.
     @objc public var filters: [ZLFilter] {
         set {
-            pri_filters = newValue
+            pri_filters = ZLFilter.all
         }
         get {
             if pri_filters.isEmpty {
